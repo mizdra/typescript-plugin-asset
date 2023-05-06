@@ -11,6 +11,9 @@ module.exports = {
     es2022: true,
     node: true,
   },
+  rules: {
+    'no-console': 'off',
+  },
   overrides: [
     {
       files: ['*.ts', '*.tsx', '*.cts', '*.mts'],

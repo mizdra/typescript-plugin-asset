@@ -18,7 +18,7 @@ See [src/index.ts](https://github.com/mizdra/asset-dts-generator/blob/main/src/i
 
 import { run, parseArgv } from '@mizdra/asset-dts-generator';
 await run({
-  pattern: 'assets/**/*.{png,jpg,jpeg,gif,svg}',
+  patterns: ['assets/**/*.{png,jpg,jpeg,gif,svg}'],
   exportedNameCase: 'constantCase',
   exportedNamePrefix: 'I_',
   // You may also inherit CLI options from `process.argv`.

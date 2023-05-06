@@ -3,6 +3,7 @@
   "description": "The tool to generate completion-friendly image .d.ts files.",
   "version": "0.0.0",
   "type": "module",
+  "sideEffects": false,
   "repository": "https://github.com/mizdra/asset-dts-generator.git",
   "author": "mizdra <pp.mizdra@gmail.com>",
   "license": "MIT",
@@ -17,7 +18,7 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
-    "dev": "npm run build && node bin/example-command.js",
+    "dev": "npm run build && node bin/asset-dts-generator.js --exported-name-case constantCase --exported-name-prefix I_ \"examples/*/assets/**/*.{png,jpg,jpeg,gif,svg}\"",
     "lint": "run-s -c lint:*",
     "lint:tsc": "tsc",
     "lint:eslint": "eslint .",
@@ -30,6 +31,7 @@
     "@mizdra/prettier-config-mizdra": "^1.0.0",
     "@tsconfig/node18": "^1.0.1",
     "@tsconfig/strictest": "^2.0.0",
+    "@types/dedent": "^0.7.0",
     "@types/eslint": "^8.37.0",
     "@types/node": "^18.15.11",
     "eslint": "^8.38.0",
@@ -50,7 +52,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "bin": {
-    "example-command": "bin/example-command.js"
+    "asset-dts-generator": "bin/asset-dts-generator.js"
   },
   "keywords": [],
   "files": [
@@ -59,5 +61,10 @@
     "!src/**/*.test.ts",
     "!src/**/__snapshots__",
     "dist"
-  ]
+  ],
+  "dependencies": {
+    "change-case": "^4.1.2",
+    "dedent": "^0.7.0",
+    "glob": "^10.2.2"
+  }
 }
