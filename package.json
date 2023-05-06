@@ -1,11 +1,11 @@
 {
-  "name": "app_name",
-  "description": "app_description",
+  "name": "asset-dts-generator",
+  "description": "The tool to generate completion-friendly image .d.ts files.",
   "version": "0.0.0",
   "type": "module",
-  "repository": "https://github.com/mizdra/app_name.git",
+  "repository": "https://github.com/mizdra/asset-dts-generator.git",
   "author": "mizdra <pp.mizdra@gmail.com>",
-  "license": "CC0-1.0",
+  "license": "MIT",
   "private": true,
   "exports": {
     ".": {
