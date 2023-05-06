@@ -1,0 +1,22 @@
+{
+  "name": "nextjs",
+  "version": "0.1.0",
+  "module": "commonjs",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "gen": "exit",
+    "build": "next build --no-lint",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@types/node": "20.1.0",
+    "@types/react": "18.2.6",
+    "@types/react-dom": "18.2.4",
+    "next": "13.4.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "typescript": "5.0.4"
+  }
+}
