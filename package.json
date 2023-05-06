@@ -1,5 +1,5 @@
 {
-  "name": "asset-dts-generator",
+  "name": "@mizdra/asset-dts-generator",
   "description": "The tool to generate completion-friendly image .d.ts files.",
   "version": "0.0.0",
   "type": "module",
