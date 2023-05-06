@@ -1,0 +1,63 @@
+{
+  "name": "app_name",
+  "description": "app_description",
+  "version": "0.0.0",
+  "type": "module",
+  "repository": "https://github.com/mizdra/app_name.git",
+  "author": "mizdra <pp.mizdra@gmail.com>",
+  "license": "CC0-1.0",
+  "private": true,
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "dev": "npm run build && node bin/example-command.js",
+    "lint": "run-s -c lint:*",
+    "lint:tsc": "tsc",
+    "lint:eslint": "eslint .",
+    "lint:prettier": "prettier --check .",
+    "test": "vitest"
+  },
+  "prettier": "@mizdra/prettier-config-mizdra",
+  "devDependencies": {
+    "@mizdra/eslint-config-mizdra": "^2.0.0",
+    "@mizdra/prettier-config-mizdra": "^1.0.0",
+    "@tsconfig/node18": "^1.0.1",
+    "@tsconfig/strictest": "^2.0.0",
+    "@types/eslint": "^8.37.0",
+    "@types/node": "^18.15.11",
+    "eslint": "^8.38.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.8.7",
+    "typescript": "^5.0.4",
+    "vitest": "^0.30.1",
+    "vitest-github-actions-reporter": "^0.10.0"
+  },
+  "overrides": {
+    "tsconfig-paths": "^4.0.0"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "bin": {
+    "example-command": "bin/example-command.js"
+  },
+  "keywords": [],
+  "files": [
+    "bin",
+    "src",
+    "!src/**/*.test.ts",
+    "!src/**/__snapshots__",
+    "dist"
+  ]
+}
