@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import I_NEXT from '../assets/next.svg';
-import I_TS_LOGO_256 from '../assets/ts-logo-256.png.js';
+import I_TS_LOGO_256 from '../assets/ts-logo-256.png';
 
 export default function Home() {
   return (

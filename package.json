@@ -18,7 +18,7 @@
   },
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
-    "dev": "npm run build && node bin/asset-dts-generator.js --exported-name-case constantCase --exported-name-prefix I_ \"examples/*/assets/**/*.{png,jpg,jpeg,gif,svg}\"",
+    "dev": "npm run build && node bin/asset-dts-generator.js \"examples/*/assets/**/*.{png,jpg,jpeg,gif,svg}\"",
     "lint": "run-s -c lint:*",
     "lint:tsc": "tsc",
     "lint:eslint": "eslint .",
