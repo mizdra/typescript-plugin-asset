@@ -2,10 +2,33 @@
 
 The tool to generate completion-friendly image `.d.ts` files.
 
+## Install
+
+```console
+$ npm install -D @mizdra/asset-dts-generator
+```
+
 ## Usage
 
 ```console
-$ asset-dts-generator --exported-name-case constantCase --exported-name-prefix I_ "assets/**/*.{png,jpg,jpeg,gif,svg}"
+$ asset-dts-generator --help
+Generate TypeScript declaration files for assets.
+
+asset-dts-generator [options] <glob-pattern>...
+
+Options:
+  --help                           Show help.
+  --exported-name-case <case>      Case of exported name. One of ${JSON.stringify(EXPORTED_NAME_CASES)}.
+  --exported-name-prefix <prefix>  Prefix of exported name. Default is 'I_'.
+  --arbitrary-extensions           Generate \`.d.*.ts\` instead of \`.*.d.ts\`. Default is false.
+  --exclude <pattern>...           Exclude files matching the given glob patterns.
+
+Examples:
+  asset-dts-generator "assets/**/*.{png,svg,jpg,jpeg,gif,webp,avif,ico}"
+  asset-dts-generator --exported-name-case camelCase "assets/**/*.{png,svg,jpg,jpeg,gif,webp,avif,ico}"
+  asset-dts-generator --exported-name-prefix "IMG_" "assets/**/*.{png,svg,jpg,jpeg,gif,webp,avif,ico}"
+  asset-dts-generator --arbitrary-extensions "assets/**/*.{png,svg,jpg,jpeg,gif,webp,avif,ico}"
+  asset-dts-generator --exclude "node_modules/**" "**/*.{png,svg,jpg,jpeg,gif,webp,avif,ico}"
 ```
 
 ## Node.js API
