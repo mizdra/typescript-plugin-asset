@@ -1,7 +1,7 @@
 import util from 'node:util';
 import dedent from 'dedent';
 
-const EXPORTED_NAME_CASES = ['constantCase', 'camelCase', 'pascalCase', 'snakeCase'] as const;
+export const EXPORTED_NAME_CASES = ['constantCase', 'camelCase', 'pascalCase', 'snakeCase'] as const;
 export type ExportedNameCase = (typeof EXPORTED_NAME_CASES)[number];
 
 export type ParseArgvResult = {
@@ -59,6 +59,11 @@ export function parseArgv(argv: string[]): ParseArgvResult {
         values['exported-name-case']
       }\`.`,
     );
+    // eslint-disable-next-line n/no-process-exit
+    process.exit(1);
+  }
+  if (values['exported-name-prefix'] !== undefined && !/^\p{ID_Start}/u.test(values['exported-name-prefix'])) {
+    console.error(`--exported-name-prefix must begin with a character that is a valid JavaScript identifier.`);
     // eslint-disable-next-line n/no-process-exit
     process.exit(1);
   }

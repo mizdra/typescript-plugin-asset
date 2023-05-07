@@ -20,6 +20,7 @@ function canonicalizeOptions(options: RunnerOptions) {
 }
 
 export async function run(options: RunnerOptions): Promise<void> {
+  // TODO: Support --watch mode
   const { patterns, exportedNameCase, exportedNamePrefix, arbitraryExtensions, exclude, cwd } =
     canonicalizeOptions(options);
 
