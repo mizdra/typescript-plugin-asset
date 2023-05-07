@@ -15,11 +15,15 @@
     "jsx": "preserve",
     "incremental": true,
     "plugins": [
+      { "name": "next" },
       {
-        "name": "next"
+        "name": "@mizdra/asset-dts-generator",
+        "patterns": ["assets/**/*.{png,svg,jpg,jpeg,gif,webp,avif,ico}"],
+        "exportedNameCase": "constantCase",
+        "exportedNamePrefix": "I_"
       }
     ]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
 }
