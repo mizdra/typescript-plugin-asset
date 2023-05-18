@@ -1,46 +1,35 @@
 import { LanguageServiceHost } from '@volar/language-core';
 import type * as ts from 'typescript/lib/tsserverlibrary';
 import { createLanguageService } from './language-service/index.js';
-import { AssetPluginOptions, createParsedCommandLine } from './option.js';
-import { isAssetFile } from './util';
+import { getParsedAssetPluginOptions } from './option.js';
+import { getAssetFileNames } from './util';
 
 const init: ts.server.PluginModuleFactory = (modules) => {
   const { typescript: ts } = modules;
   const externalFiles = new Map<ts.server.Project, string[]>();
   const pluginModule: ts.server.PluginModule = {
     create(info) {
-      const tsConfigPath = info.project.getProjectName();
+      // @ts-expect-error
+      globalThis.info = info;
+      const assetPluginOptions = getParsedAssetPluginOptions(info);
 
-      if (!info.project.fileExists(tsConfigPath)) {
+      if (!info.project.fileExists(assetPluginOptions.tsConfigPath)) {
         // project name not a tsconfig path, this is a inferred project
         return info.languageService;
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const assetPluginOptions = { ...info.config, tsConfigPath } as AssetPluginOptions; // TODO: validate
+      const assetFileNames = getAssetFileNames(ts.sys, assetPluginOptions);
 
-      const parsed = createParsedCommandLine(ts, ts.sys, tsConfigPath);
-      const assetsFileNames = parsed.fileNames.filter((fileName) => isAssetFile(fileName, assetPluginOptions));
-      // log
       info.project.projectService.logger.info(
-        `@init: ${JSON.stringify(
-          {
-            projectName: tsConfigPath,
-            assetPluginOptions,
-            parsed,
-            assetsFileNames,
-          },
-          null,
-          2,
-        )}`,
+        `@init: ${JSON.stringify({ assetPluginOptions, assetsFileNames: assetFileNames }, null, 2)}`,
       );
-      // info.project.projectService.logger.info(`assetFileNames: ${JSON.stringify(assetsFileNames)}}`);
-      if (!assetsFileNames.length) {
-        // no vue file
+
+      // TODO: Can you cover cases where asset files are added later?
+      if (!assetFileNames.length) {
         return info.languageService;
       }
 
-      externalFiles.set(info.project, assetsFileNames);
+      externalFiles.set(info.project, assetFileNames);
 
       // fix: https://github.com/vuejs/language-tools/issues/205
       // if (!(info.project as any).__asset_getScriptKind) {
@@ -64,20 +53,21 @@ const init: ts.server.PluginModuleFactory = (modules) => {
         getDirectories: (path) => info.project.getDirectories(path),
         readDirectory: (path, extensions, exclude, include, depth) =>
           info.project.readDirectory(path, extensions, exclude, include, depth),
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         realpath: info.project.realpath ? (path) => info.project.realpath!(path) : undefined,
         getCompilationSettings: () => info.project.getCompilationSettings(),
         getCurrentDirectory: () => info.project.getCurrentDirectory(),
         getDefaultLibFileName: () => info.project.getDefaultLibFileName(),
         getProjectVersion: () => info.project.getProjectVersion(),
         getProjectReferences: () => info.project.getProjectReferences(),
-        getScriptFileNames: () => [...info.project.getScriptFileNames(), ...assetsFileNames],
+        getScriptFileNames: () => [...info.project.getScriptFileNames(), ...assetFileNames],
         getScriptVersion: (fileName) => info.project.getScriptVersion(fileName),
         getScriptSnapshot: (fileName) => info.project.getScriptSnapshot(fileName),
       };
-      const assetLS = createLanguageService(assetTSLSHost, assetPluginOptions);
+      const assetLS = createLanguageService(ts.sys, assetTSLSHost, assetPluginOptions);
 
       return new Proxy(info.languageService, {
-        get: (target: any, property: keyof ts.LanguageService) => {
+        get: (target: ts.LanguageService, property: keyof ts.LanguageService) => {
           if (
             property === 'getSemanticDiagnostics' ||
             property === 'getEncodedSemanticClassifications' ||
