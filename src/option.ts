@@ -4,20 +4,22 @@ export const EXPORTED_NAME_CASES = ['constantCase', 'camelCase', 'pascalCase', '
 export type ExportedNameCase = (typeof EXPORTED_NAME_CASES)[number];
 
 export type SuggestionRule = {
-  include: string[];
-  exclude?: string[] | undefined;
-  extensions: string[] | undefined;
+  extensions: string[];
   exportedNameCase?: ExportedNameCase | undefined;
   exportedNamePrefix?: string | undefined;
 };
 
 export type AssetPluginOptions = {
+  include: string[];
+  exclude?: string[] | undefined;
   rules: SuggestionRule[];
 };
 
 export type ParsedAssetPluginOptions = {
   tsConfigPath: string;
   allowArbitraryExtensions?: boolean | undefined;
+  include: string[];
+  exclude?: string[] | undefined;
   rules: SuggestionRule[];
 };
 
@@ -37,6 +39,8 @@ export function getParsedAssetPluginOptions(info: ts.server.PluginCreateInfo): P
   return {
     tsConfigPath,
     allowArbitraryExtensions,
+    include: assetPluginConfig.include,
+    exclude: assetPluginConfig.exclude,
     rules: assetPluginConfig.rules,
   };
 }

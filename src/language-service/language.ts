@@ -8,8 +8,7 @@ import {
   ParsedAssetPluginOptions,
   DEFAULT_ALLOW_ARBITRARY_EXTENSIONS,
 } from '../option';
-import { getMatchedSuggestionRule } from '../util';
-import { isAssetFile } from '../util.js';
+import { AssetLanguageServiceHost } from './host.js';
 
 export class AssetFile implements VirtualFile {
   kind = FileKind.TextFile;
@@ -23,7 +22,7 @@ export class AssetFile implements VirtualFile {
   constructor(
     public sourceFileName: string,
     public snapshot: ts.IScriptSnapshot,
-    public sys: ts.System,
+    public host: AssetLanguageServiceHost,
     public assetPluginOptions: ParsedAssetPluginOptions,
   ) {
     this.fileName = sourceFileName;
@@ -36,7 +35,7 @@ export class AssetFile implements VirtualFile {
   }
 
   onSnapshotUpdated() {
-    const suggestionRule = getMatchedSuggestionRule(this.sourceFileName, this.sys, this.assetPluginOptions);
+    const suggestionRule = this.host.getMatchedSuggestionRule(this.sourceFileName);
     if (suggestionRule === undefined) return;
 
     this.mappings = [
@@ -79,11 +78,11 @@ export class AssetFile implements VirtualFile {
   }
 }
 
-export function createAssetLanguage(sys: ts.System, assetPluginOptions: ParsedAssetPluginOptions) {
+export function createAssetLanguage(host: AssetLanguageServiceHost, assetPluginOptions: ParsedAssetPluginOptions) {
   return {
     createVirtualFile(fileName: string, snapshot: ts.IScriptSnapshot) {
-      if (isAssetFile(fileName, sys, assetPluginOptions)) {
-        return new AssetFile(fileName, snapshot, sys, assetPluginOptions);
+      if (host.isAssetFile(fileName)) {
+        return new AssetFile(fileName, snapshot, host, assetPluginOptions);
       }
       return undefined;
     },
