@@ -9,13 +9,13 @@ export type SuggestionRule = {
   exportedNamePrefix?: string | undefined;
 };
 
-export type AssetPluginOptions = {
+export type RawAssetPluginOptions = {
   include: string[];
   exclude?: string[] | undefined;
   rules: SuggestionRule[];
 };
 
-export type ParsedAssetPluginOptions = {
+export type AssetPluginOptions = {
   tsConfigPath: string;
   allowArbitraryExtensions?: boolean | undefined;
   include: string[];
@@ -26,15 +26,15 @@ export type ParsedAssetPluginOptions = {
 export const DEFAULT_EXPORTED_NAME_CASE = 'constantCase' as const satisfies SuggestionRule['exportedNameCase'];
 export const DEFAULT_EXPORTED_NAME_PREFIX = 'I_' as const satisfies SuggestionRule['exportedNamePrefix'];
 export const DEFAULT_ALLOW_ARBITRARY_EXTENSIONS =
-  false as const satisfies ParsedAssetPluginOptions['allowArbitraryExtensions'];
+  false as const satisfies AssetPluginOptions['allowArbitraryExtensions'];
 
-export function getParsedAssetPluginOptions(info: ts.server.PluginCreateInfo): ParsedAssetPluginOptions {
+export function getParsedAssetPluginOptions(info: ts.server.PluginCreateInfo): AssetPluginOptions {
   const tsConfigPath = info.project.getProjectName();
   // MEMO: `info.project.getCompilationSettings` is the alias of `info.project.getCompilerOptions`.
   // ref: https://github.com/microsoft/TypeScript/issues/19218
   const allowArbitraryExtensions = info.project.getCompilationSettings().allowArbitraryExtensions;
 
-  const assetPluginConfig = info.config as AssetPluginOptions; // TODO: validate
+  const assetPluginConfig = info.config as RawAssetPluginOptions; // TODO: validate
 
   return {
     tsConfigPath,

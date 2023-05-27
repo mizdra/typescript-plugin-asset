@@ -5,7 +5,7 @@ import { getDtsContent, getDtsFilePath } from '../dts';
 import {
   DEFAULT_EXPORTED_NAME_CASE,
   DEFAULT_EXPORTED_NAME_PREFIX,
-  ParsedAssetPluginOptions,
+  AssetPluginOptions,
   DEFAULT_ALLOW_ARBITRARY_EXTENSIONS,
 } from '../option';
 import { AssetLanguageServiceHost } from './host.js';
@@ -23,7 +23,7 @@ export class AssetFile implements VirtualFile {
     public sourceFileName: string,
     public snapshot: ts.IScriptSnapshot,
     public host: AssetLanguageServiceHost,
-    public assetPluginOptions: ParsedAssetPluginOptions,
+    public assetPluginOptions: AssetPluginOptions,
   ) {
     this.fileName = sourceFileName;
     this.onSnapshotUpdated();
@@ -78,7 +78,7 @@ export class AssetFile implements VirtualFile {
   }
 }
 
-export function createAssetLanguage(host: AssetLanguageServiceHost, assetPluginOptions: ParsedAssetPluginOptions) {
+export function createAssetLanguage(host: AssetLanguageServiceHost, assetPluginOptions: AssetPluginOptions) {
   return {
     createVirtualFile(fileName: string, snapshot: ts.IScriptSnapshot) {
       if (host.isAssetFile(fileName)) {

@@ -1,7 +1,7 @@
 import path from 'node:path';
 import { LanguageServiceHost } from '@volar/language-core';
 import type * as ts from 'typescript/lib/tsserverlibrary';
-import { ParsedAssetPluginOptions, SuggestionRule } from '../option';
+import { AssetPluginOptions, SuggestionRule } from '../option';
 import { unreachable } from '../util';
 
 export type AssetLanguageServiceHost = LanguageServiceHost & {
@@ -13,7 +13,7 @@ export type AssetLanguageServiceHost = LanguageServiceHost & {
 export function createAssetLanguageServiceHost(
   sys: ts.System,
   info: ts.server.PluginCreateInfo,
-  assetPluginOptions: ParsedAssetPluginOptions,
+  assetPluginOptions: AssetPluginOptions,
 ): AssetLanguageServiceHost {
   if (sys.watchDirectory === undefined) throw new Error('sys.watchDirectory is undefined');
 
