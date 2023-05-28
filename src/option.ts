@@ -4,17 +4,17 @@ import type * as ts from 'typescript/lib/tsserverlibrary.js';
 export const EXPORTED_NAME_CASES = ['constantCase', 'camelCase', 'pascalCase', 'snakeCase'] as const;
 export type ExportedNameCase = (typeof EXPORTED_NAME_CASES)[number];
 
-export type SuggestionRule = {
-  exportedNameCase?: ExportedNameCase | undefined;
-  exportedNamePrefix?: string | undefined;
-};
-
 export type RawAssetPluginOptions = {
   include: string[];
   exclude?: string[] | undefined;
   extensions: string[];
   exportedNameCase?: ExportedNameCase | undefined;
   exportedNamePrefix?: string | undefined;
+};
+
+export type SuggestionRule = {
+  exportedNameCase: ExportedNameCase;
+  exportedNamePrefix: string;
 };
 
 export type AssetPluginOptions = SuggestionRule & {
@@ -47,7 +47,7 @@ export function getParsedAssetPluginOptions(info: ts.server.PluginCreateInfo): A
     include: assetPluginConfig.include.map((inc) => path.resolve(projectRoot, inc)),
     exclude: (assetPluginConfig.exclude ?? DEFAULT_EXCLUDE).map((exc) => path.resolve(projectRoot, exc)),
     extensions: assetPluginConfig.extensions,
-    exportedNameCase: assetPluginConfig.exportedNameCase,
-    exportedNamePrefix: assetPluginConfig.exportedNamePrefix,
+    exportedNameCase: assetPluginConfig.exportedNameCase ?? DEFAULT_EXPORTED_NAME_CASE,
+    exportedNamePrefix: assetPluginConfig.exportedNamePrefix ?? DEFAULT_EXPORTED_NAME_PREFIX,
   };
 }

@@ -3,12 +3,7 @@ import { Stack } from '@volar/source-map';
 import type * as ts from 'typescript/lib/tsserverlibrary';
 import { getDtsContent, getDtsFilePath } from '../dts';
 import { AssetLanguageServiceHost } from '../language-service-host.js';
-import {
-  DEFAULT_EXPORTED_NAME_CASE,
-  DEFAULT_EXPORTED_NAME_PREFIX,
-  AssetPluginOptions,
-  DEFAULT_ALLOW_ARBITRARY_EXTENSIONS,
-} from '../option';
+import { AssetPluginOptions } from '../option';
 
 export class AssetFile implements VirtualFile {
   kind = FileKind.TextFile;
@@ -48,15 +43,12 @@ export class AssetFile implements VirtualFile {
 
     const dtsContent = getDtsContent(
       this.sourceFileName,
-      suggestionRule.exportedNameCase ?? DEFAULT_EXPORTED_NAME_CASE,
-      suggestionRule.exportedNamePrefix ?? DEFAULT_EXPORTED_NAME_PREFIX,
+      suggestionRule.exportedNameCase,
+      suggestionRule.exportedNamePrefix,
     );
     this.embeddedFiles = [
       {
-        fileName: getDtsFilePath(
-          this.sourceFileName,
-          this.assetPluginOptions.allowArbitraryExtensions ?? DEFAULT_ALLOW_ARBITRARY_EXTENSIONS,
-        ),
+        fileName: getDtsFilePath(this.sourceFileName, this.assetPluginOptions.allowArbitraryExtensions),
         kind: FileKind.TypeScriptHostFile,
         snapshot: {
           getText: (start, end) => dtsContent.substring(start, end),
