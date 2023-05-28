@@ -18,32 +18,20 @@ export function createAssetLanguageServiceHost(
 
   const projectRoot = path.dirname(assetPluginOptions.tsConfigPath);
 
-  function isMatchFile(
-    fileName: string,
-    extensions: string[],
-    exclude: string[] | undefined,
-    include: string[],
-  ): boolean {
+  function isMatchFile(fileName: string, extensions: string[], exclude: string[], include: string[]): boolean {
     if (!extensions.includes(path.extname(fileName))) return false;
-    return sys
-      .readDirectory(
-        path.dirname(fileName),
-        undefined,
-        exclude?.map((e) => path.resolve(projectRoot, e)),
-        include.map((i) => path.resolve(projectRoot, i)),
-        1,
-      )
-      .includes(fileName);
+    return sys.readDirectory(path.dirname(fileName), extensions, exclude, include, 1).includes(fileName);
   }
   function getAssetFileNameAndRule(): Map<string, SuggestionRule> {
     const assetFileNameAndRule = new Map<string, SuggestionRule>();
     const fileNames = sys.readDirectory(
       path.dirname(assetPluginOptions.tsConfigPath),
       assetPluginOptions.extensions,
-      assetPluginOptions.exclude?.map((e) => path.resolve(projectRoot, e)),
-      assetPluginOptions.include.map((i) => path.resolve(projectRoot, i)),
+      assetPluginOptions.exclude,
+      assetPluginOptions.include,
     );
     for (const fileName of fileNames) {
+      // TODO: support custom rule
       assetFileNameAndRule.set(fileName, {
         exportedNameCase: assetPluginOptions.exportedNameCase,
         exportedNamePrefix: assetPluginOptions.exportedNamePrefix,
@@ -59,6 +47,7 @@ export function createAssetLanguageServiceHost(
       if (!isMatchFile(fileName, assetPluginOptions.extensions, assetPluginOptions.exclude, assetPluginOptions.include))
         return;
       if (sys.fileExists(fileName)) {
+        // TODO: support custom rule
         assetFileNameAndRule.set(fileName, {
           exportedNameCase: assetPluginOptions.exportedNameCase,
           exportedNamePrefix: assetPluginOptions.exportedNamePrefix,
@@ -77,7 +66,7 @@ export function createAssetLanguageServiceHost(
       info.project.updateGraph();
     },
     true,
-    { excludeDirectories: assetPluginOptions.exclude ?? [] },
+    { excludeDirectories: assetPluginOptions.exclude },
   );
 
   return {
