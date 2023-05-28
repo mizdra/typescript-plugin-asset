@@ -2,13 +2,13 @@ import { VirtualFile, FileKind, FileCapabilities, FileRangeCapabilities } from '
 import { Stack } from '@volar/source-map';
 import type * as ts from 'typescript/lib/tsserverlibrary';
 import { getDtsContent, getDtsFilePath } from '../dts';
+import { AssetLanguageServiceHost } from '../language-service-host.js';
 import {
   DEFAULT_EXPORTED_NAME_CASE,
   DEFAULT_EXPORTED_NAME_PREFIX,
   AssetPluginOptions,
   DEFAULT_ALLOW_ARBITRARY_EXTENSIONS,
 } from '../option';
-import { AssetLanguageServiceHost } from './host.js';
 
 export class AssetFile implements VirtualFile {
   kind = FileKind.TextFile;

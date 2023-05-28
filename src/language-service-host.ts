@@ -1,7 +1,7 @@
 import path from 'node:path';
 import { LanguageServiceHost } from '@volar/language-core';
 import type * as ts from 'typescript/lib/tsserverlibrary';
-import { AssetPluginOptions, SuggestionRule } from '../option';
+import { AssetPluginOptions, SuggestionRule } from './option';
 
 export type AssetLanguageServiceHost = LanguageServiceHost & {
   getAssetFileNames(): string[];

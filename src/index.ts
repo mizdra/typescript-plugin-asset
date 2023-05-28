@@ -1,6 +1,6 @@
 import type * as ts from 'typescript/lib/tsserverlibrary';
-import { createAssetLanguageServiceHost } from './language-service/host.js';
 import { createLanguageService } from './language-service/index.js';
+import { createAssetLanguageServiceHost } from './language-service-host.js';
 import { getParsedAssetPluginOptions } from './option.js';
 
 const init: ts.server.PluginModuleFactory = (modules) => {
