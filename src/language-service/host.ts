@@ -2,7 +2,6 @@ import path from 'node:path';
 import { LanguageServiceHost } from '@volar/language-core';
 import type * as ts from 'typescript/lib/tsserverlibrary';
 import { AssetPluginOptions, SuggestionRule } from '../option';
-import { unreachable } from '../util';
 
 export type AssetLanguageServiceHost = LanguageServiceHost & {
   getAssetFileNames(): string[];
@@ -38,19 +37,17 @@ export function createAssetLanguageServiceHost(
   }
   function getAssetFileNameAndRule(): Map<string, SuggestionRule> {
     const assetFileNameAndRule = new Map<string, SuggestionRule>();
-    const allExtensions = assetPluginOptions.rules.map((r) => r.extensions).flat();
     const fileNames = sys.readDirectory(
       path.dirname(assetPluginOptions.tsConfigPath),
-      allExtensions,
+      assetPluginOptions.extensions,
       assetPluginOptions.exclude?.map((e) => path.resolve(projectRoot, e)),
       assetPluginOptions.include.map((i) => path.resolve(projectRoot, i)),
     );
     for (const fileName of fileNames) {
-      const rule = assetPluginOptions.rules.find((rule) =>
-        rule.extensions.some((extension) => fileName.endsWith(extension)),
-      );
-      if (!rule) return unreachable(`rule not found for ${fileName}`);
-      assetFileNameAndRule.set(fileName, rule);
+      assetFileNameAndRule.set(fileName, {
+        exportedNameCase: assetPluginOptions.exportedNameCase,
+        exportedNamePrefix: assetPluginOptions.exportedNamePrefix,
+      });
     }
     return assetFileNameAndRule;
   }
@@ -59,13 +56,15 @@ export function createAssetLanguageServiceHost(
   sys.watchDirectory(
     projectRoot,
     (fileName) => {
-      for (const rule of assetPluginOptions.rules) {
-        if (!isMatchFile(fileName, rule.extensions, assetPluginOptions.exclude, assetPluginOptions.include)) continue;
-        if (sys.fileExists(fileName)) {
-          assetFileNameAndRule.set(fileName, rule);
-        } else {
-          assetFileNameAndRule.delete(fileName);
-        }
+      if (!isMatchFile(fileName, assetPluginOptions.extensions, assetPluginOptions.exclude, assetPluginOptions.include))
+        return;
+      if (sys.fileExists(fileName)) {
+        assetFileNameAndRule.set(fileName, {
+          exportedNameCase: assetPluginOptions.exportedNameCase,
+          exportedNamePrefix: assetPluginOptions.exportedNamePrefix,
+        });
+      } else {
+        assetFileNameAndRule.delete(fileName);
       }
       info.project.projectService.logger.info(
         `@watchDirectory-callback: ${JSON.stringify(

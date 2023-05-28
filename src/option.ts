@@ -4,7 +4,6 @@ export const EXPORTED_NAME_CASES = ['constantCase', 'camelCase', 'pascalCase', '
 export type ExportedNameCase = (typeof EXPORTED_NAME_CASES)[number];
 
 export type SuggestionRule = {
-  extensions: string[];
   exportedNameCase?: ExportedNameCase | undefined;
   exportedNamePrefix?: string | undefined;
 };
@@ -12,19 +11,21 @@ export type SuggestionRule = {
 export type RawAssetPluginOptions = {
   include: string[];
   exclude?: string[] | undefined;
-  rules: SuggestionRule[];
+  extensions: string[];
+  exportedNameCase?: ExportedNameCase | undefined;
+  exportedNamePrefix?: string | undefined;
 };
 
-export type AssetPluginOptions = {
+export type AssetPluginOptions = SuggestionRule & {
   tsConfigPath: string;
   allowArbitraryExtensions?: boolean | undefined;
   include: string[];
   exclude?: string[] | undefined;
-  rules: SuggestionRule[];
+  extensions: string[];
 };
 
-export const DEFAULT_EXPORTED_NAME_CASE = 'constantCase' as const satisfies SuggestionRule['exportedNameCase'];
-export const DEFAULT_EXPORTED_NAME_PREFIX = 'I_' as const satisfies SuggestionRule['exportedNamePrefix'];
+export const DEFAULT_EXPORTED_NAME_CASE = 'constantCase' as const satisfies AssetPluginOptions['exportedNameCase'];
+export const DEFAULT_EXPORTED_NAME_PREFIX = 'I_' as const satisfies AssetPluginOptions['exportedNamePrefix'];
 export const DEFAULT_ALLOW_ARBITRARY_EXTENSIONS =
   false as const satisfies AssetPluginOptions['allowArbitraryExtensions'];
 
@@ -41,6 +42,8 @@ export function getParsedAssetPluginOptions(info: ts.server.PluginCreateInfo): A
     allowArbitraryExtensions,
     include: assetPluginConfig.include,
     exclude: assetPluginConfig.exclude,
-    rules: assetPluginConfig.rules,
+    extensions: assetPluginConfig.extensions,
+    exportedNameCase: assetPluginConfig.exportedNameCase,
+    exportedNamePrefix: assetPluginConfig.exportedNamePrefix,
   };
 }
