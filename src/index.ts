@@ -1,15 +1,13 @@
 import type * as ts from 'typescript/lib/tsserverlibrary';
 import { createLanguageService } from './language-service/index.js';
 import { createAssetLanguageServiceHost } from './language-service-host.js';
-import { getParsedAssetPluginOptions } from './option.js';
+import { getAssetPluginOptions } from './option.js';
 
 const init: ts.server.PluginModuleFactory = (modules) => {
   const { typescript: ts } = modules;
   const pluginModule: ts.server.PluginModule = {
     create(info) {
-      // @ts-expect-error
-      globalThis.info = info;
-      const assetPluginOptions = getParsedAssetPluginOptions(info);
+      const assetPluginOptions = getAssetPluginOptions(info);
 
       if (!info.project.fileExists(assetPluginOptions.tsConfigPath)) {
         // project name not a tsconfig path, this is a inferred project

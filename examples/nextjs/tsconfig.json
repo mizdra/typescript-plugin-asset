@@ -19,17 +19,9 @@
       {
         "name": "@mizdra/asset-dts-generator",
         "include": ["assets/**/*"],
-        "rules": [
-          {
-            "extensions": [".png", ".jpg"],
-            "exportedNameCase": "constantCase",
-            "exportedNamePrefix": "I_"
-          },{
-            "extensions": [".svg"],
-            "exportedNameCase": "constantCase",
-            "exportedNamePrefix": "II_"
-          }
-        ],
+        "extensions": [".png", ".jpg", ".svg"],
+        "exportedNameCase": "constantCase",
+        "exportedNamePrefix": "I_"
       }
     ]
   },
