@@ -38,7 +38,7 @@ function isStringArray(value: unknown): value is string[] {
 }
 
 // eslint-disable-next-line complexity
-function assertOptions(config: unknown): asserts config is RawAssetPluginOptions {
+export function assertOptions(config: unknown): asserts config is RawAssetPluginOptions {
   if (typeof config !== 'object' || config === null) return unreachable('`config` is not object.');
 
   if (!('name' in config) || config.name !== '@mizdra/asset-dts-generator')
