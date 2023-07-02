@@ -14,8 +14,6 @@ const init: ts.server.PluginModuleFactory = (modules) => {
         return info.languageService;
       }
 
-      info.project.projectService.logger.info(`@init: ${JSON.stringify({ assetPluginOptions }, null, 2)}`);
-
       const assetTSLSHost = createAssetLanguageServiceHost(ts.sys, info, assetPluginOptions);
       const assetLS = createLanguageService(assetTSLSHost, assetPluginOptions);
 

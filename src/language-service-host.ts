@@ -55,13 +55,6 @@ export function createAssetLanguageServiceHost(
       } else {
         assetFileNameAndRule.delete(fileName);
       }
-      info.project.projectService.logger.info(
-        `@watchDirectory-callback: ${JSON.stringify(
-          { fileName, assetFileNameAndRule: Object.fromEntries(assetFileNameAndRule) },
-          null,
-          2,
-        )}`,
-      );
       info.project.markAsDirty();
       info.project.updateGraph();
     },
@@ -87,7 +80,6 @@ export function createAssetLanguageServiceHost(
     getProjectVersion: () => info.project.getProjectVersion(),
     getProjectReferences: () => info.project.getProjectReferences(),
     getScriptFileNames: () => {
-      info.project.projectService.logger.info(`@getScriptFileNames`);
       return [...info.project.getScriptFileNames(), ...assetFileNameAndRule.keys()];
     },
     getScriptVersion: (fileName) => info.project.getScriptVersion(fileName),
