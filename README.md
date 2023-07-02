@@ -1,6 +1,6 @@
 # @mizdra/typescript-plugin-asset
 
-The tool to generate completion-friendly image `.d.ts` files.
+TypeScript language service plugin supporting for importing assets.
 
 ## Install
 

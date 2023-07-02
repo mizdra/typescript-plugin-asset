@@ -1,6 +1,6 @@
 {
   "name": "@mizdra/typescript-plugin-asset",
-  "description": "The tool to generate completion-friendly image .d.ts files.",
+  "description": "TypeScript language service plugin supporting for importing assets.",
   "version": "0.0.0",
   "type": "commonjs",
   "sideEffects": false,
