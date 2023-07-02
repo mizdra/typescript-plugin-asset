@@ -17,7 +17,7 @@
     "plugins": [
       { "name": "next" },
       {
-        "name": "@mizdra/asset-dts-generator",
+        "name": "@mizdra/typescript-plugin-asset",
         "include": ["assets/**/*"],
         "extensions": [".png", ".jpg", ".svg"],
         "exportedNameCase": "constantCase",

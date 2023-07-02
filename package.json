@@ -1,5 +1,5 @@
 {
-  "name": "@mizdra/asset-dts-generator",
+  "name": "@mizdra/typescript-plugin-asset",
   "description": "The tool to generate completion-friendly image .d.ts files.",
   "version": "0.0.0",
   "type": "commonjs",

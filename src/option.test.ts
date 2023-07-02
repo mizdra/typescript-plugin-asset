@@ -2,7 +2,7 @@ import { describe, expect, it, test } from 'vitest';
 import { assertOptions } from './option.js';
 
 describe('assertOptions', () => {
-  const baseOptions = { name: '@mizdra/asset-dts-generator', include: ['foo'], extensions: ['.png'] };
+  const baseOptions = { name: '@mizdra/typescript-plugin-asset', include: ['foo'], extensions: ['.png'] };
   it('do not throw when options is correct', () => {
     expect(() => assertOptions(baseOptions)).not.toThrow();
   });
@@ -46,7 +46,11 @@ describe('assertOptions', () => {
     );
   });
   test('exportedNamePrefix', () => {
-    expect(() => assertOptions({ ...baseOptions, exportedNamePrefix: 1 })).toThrowErrorMatchingInlineSnapshot('"`exportedNamePrefix` must be string."');
-    expect(() => assertOptions({ ...baseOptions, exportedNamePrefix: '1' })).toThrowErrorMatchingInlineSnapshot('"`exportedNamePrefix` must begin with a character that is a valid JavaScript identifier."');
+    expect(() => assertOptions({ ...baseOptions, exportedNamePrefix: 1 })).toThrowErrorMatchingInlineSnapshot(
+      '"`exportedNamePrefix` must be string."',
+    );
+    expect(() => assertOptions({ ...baseOptions, exportedNamePrefix: '1' })).toThrowErrorMatchingInlineSnapshot(
+      '"`exportedNamePrefix` must begin with a character that is a valid JavaScript identifier."',
+    );
   });
 });

@@ -41,8 +41,8 @@ function isStringArray(value: unknown): value is string[] {
 export function assertOptions(config: unknown): asserts config is RawAssetPluginOptions {
   if (typeof config !== 'object' || config === null) return unreachable('`config` is not object.');
 
-  if (!('name' in config) || config.name !== '@mizdra/asset-dts-generator')
-    return unreachable("`name` must be '@mizdra/asset-dts-generator'");
+  if (!('name' in config) || config.name !== '@mizdra/typescript-plugin-asset')
+    return unreachable("`name` must be '@mizdra/typescript-plugin-asset'");
 
   if (!('include' in config)) throw new AppOptionValidationError('`include` is required.');
   if (!isStringArray(config.include)) throw new AppOptionValidationError('`include` must be string array.');

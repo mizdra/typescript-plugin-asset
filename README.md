@@ -1,11 +1,11 @@
-# @mizdra/asset-dts-generator
+# @mizdra/typescript-plugin-asset
 
 The tool to generate completion-friendly image `.d.ts` files.
 
 ## Install
 
 ```console
-$ npm install -D @mizdra/asset-dts-generator
+$ npm install -D @mizdra/typescript-plugin-asset
 ```
 
 ## Usage
@@ -39,7 +39,7 @@ See [src/index.ts](https://github.com/mizdra/asset-dts-generator/blob/main/src/i
 #!/usr/bin/env ts-node
 // scripts/asset-dts-generator.ts
 
-import { run, parseArgv } from '@mizdra/asset-dts-generator';
+import { run, parseArgv } from '@mizdra/typescript-plugin-asset';
 await run({
   patterns: ['assets/**/*.{png,jpg,jpeg,gif,svg}'],
   exportedNameCase: 'constantCase',
