@@ -2,6 +2,10 @@
 
 TypeScript language service plugin supporting for importing assets.
 
+## Demo
+
+TODO
+
 ## Install
 
 ```console
@@ -10,44 +14,54 @@ $ npm install -D @mizdra/typescript-plugin-asset
 
 ## Usage
 
-```console
-$ asset-dts-generator --help
-Generate TypeScript declaration files for assets.
-
-asset-dts-generator [options] <glob-pattern>...
-
-Options:
-  --help                           Show help.
-  --exported-name-case <case>      Case of exported name. One of ${JSON.stringify(EXPORTED_NAME_CASES)}.
-  --exported-name-prefix <prefix>  Prefix of exported name. Default is 'I_'.
-  --arbitrary-extensions           Generate \`.d.*.ts\` instead of \`.*.d.ts\`. Default is false.
-  --exclude <pattern>...           Exclude files matching the given glob patterns.
-
-Examples:
-  asset-dts-generator "assets/**/*.{png,svg,jpg,jpeg,gif,webp,avif,ico}"
-  asset-dts-generator --exported-name-case camelCase "assets/**/*.{png,svg,jpg,jpeg,gif,webp,avif,ico}"
-  asset-dts-generator --exported-name-prefix "IMG_" "assets/**/*.{png,svg,jpg,jpeg,gif,webp,avif,ico}"
-  asset-dts-generator --arbitrary-extensions "assets/**/*.{png,svg,jpg,jpeg,gif,webp,avif,ico}"
-  asset-dts-generator --exclude "node_modules/**" "**/*.{png,svg,jpg,jpeg,gif,webp,avif,ico}"
+```json
+// tsconfig.json
+{
+  "compilerOptions": {
+    // ...
+    "plugins": [
+      {
+        "name": "@mizdra/typescript-plugin-asset",
+        "include": ["assets/**/*"],
+        "extensions": [".png", ".jpg", ".svg"],
+        "exportedNameCase": "constantCase",
+        "exportedNamePrefix": "I_"
+      }
+    ]
+  }
+}
 ```
 
-## Node.js API
+## Options
 
-See [src/index.ts](https://github.com/mizdra/asset-dts-generator/blob/main/src/index.ts) for available API.
+### `include` (required)
 
-```ts
-#!/usr/bin/env ts-node
-// scripts/asset-dts-generator.ts
+Glob pattern of assets. `@mizdra/typescript-plugin-asset` completes import statements only for assets matching this pattern.
 
-import { run, parseArgv } from '@mizdra/typescript-plugin-asset';
-await run({
-  patterns: ['assets/**/*.{png,jpg,jpeg,gif,svg}'],
-  exportedNameCase: 'constantCase',
-  exportedNamePrefix: 'I_',
-  // You may also inherit CLI options from `process.argv`.
-  // ...parseArgv(process.argv),
-}).catch((e) => {
-  console.error(e);
-  process.exit(1);
-});
-```
+- Type: `string[]`
+- Example: `["assets/**/*"]`
+
+### `exclude`
+
+Glob pattern of assets to exclude. `@mizdra/typescript-plugin-asset` does not complete import statements for assets matching this pattern.
+
+### `extensions` (required)
+
+File extensions of assets. `@mizdra/typescript-plugin-asset` completes import statements only for assets matching this extensions.
+
+- Type: `string[]`
+- Example: `[".png", ".jpg", ".svg"]`
+
+### `exportedNameCase`
+
+The name case of default export in asset module.
+
+- Type: `"constantCase" | "camelCase" | "pascalCase" | "snakeCase"`
+- Default: `"constantCase"`
+
+### `exportedNamePrefix`
+
+The name prefix of the default export of the asset module. Must be a valid JavaScript identifier.
+
+- Type: `string`
+- Default: `"I_"`
