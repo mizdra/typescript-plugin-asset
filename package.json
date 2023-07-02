@@ -11,7 +11,6 @@
   "main": "./dist/index.js",
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
-    "dev": "npm run build && node bin/asset-dts-generator.js \"examples/*/assets/**/*.{png,jpg,jpeg,gif,svg}\"",
     "lint": "run-s -c lint:*",
     "lint:tsc": "tsc",
     "lint:eslint": "eslint .",
@@ -45,12 +44,8 @@
     "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
-  "bin": {
-    "asset-dts-generator": "bin/asset-dts-generator.js"
-  },
   "keywords": [],
   "files": [
-    "bin",
     "src",
     "!src/**/*.test.ts",
     "!src/**/__snapshots__",
