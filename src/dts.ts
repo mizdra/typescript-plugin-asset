@@ -1,5 +1,4 @@
 import path from 'node:path';
-import dedent from 'dedent';
 import { ExportedNameCase } from './option.js';
 import { changeCase } from './util';
 
@@ -29,8 +28,8 @@ export function getDtsContent(
 ): string {
   const fileBasename = path.basename(filePath);
   const exportedName = getExportedName(filePath, exportedNameCase, exportedNamePrefix);
-  return `${dedent`
-    import ${exportedName} from './__ORIGINAL_TYPE__${fileBasename}';
-    export default ${exportedName};
-  `}\n`;
+  return `${`
+import ${exportedName} from './__ORIGINAL_TYPE__${fileBasename}';
+export default ${exportedName};
+  `.trim()}\n`;
 }
