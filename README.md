@@ -29,7 +29,7 @@ To use this plugin, you need to follow three steps.
 
 ### Write the plugin configuration in `tsconfig.json`
 
-Add the following configuration to `tsconfig.json`. See [Options](#options) for details.
+Add the following configuration to `tsconfig.json`. See [Available options](#available-options) for details.
 
 ```json
 // tsconfig.json
@@ -54,13 +54,7 @@ Add the following configuration to `tsconfig.json`. See [Options](#options) for 
 > **Warning**
 > This section can be skipped by users using editors other than visual studio code.
 
-VS Code cannot load plugins by default. Therefore, special configuration is required.
-
-https://github.com/microsoft/TypeScript/wiki/Writing-a-Language-Service-Plugin#testing-locally
-
-> Note: If you're using Visual Studio Code, you'll have to use the first approach above, with a path to the module, or run the "TypeScript: Select TypeScript Version" command and choose "Use Workspace Version", or click the version number between "TypeScript" and 😃 in the lower-right corner. Otherwise, VS Code will not be able to find your plugin.
-
-Visual Studio Code cannot load plugins by default. Therefore, special operations are required.
+VS Code [cannot load plugins by default](https://github.com/microsoft/TypeScript/wiki/Writing-a-Language-Service-Plugin#testing-locally). Therefore, special operations are required.
 
 Specifically, you have to do two operations:
 
@@ -77,9 +71,7 @@ Also, although this is optional, the following settings can be added to `.vscode
 }
 ```
 
-### (Optional)
-
-## Options
+## Available options
 
 ### `include` (required)
 
