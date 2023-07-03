@@ -2,17 +2,34 @@
 
 TypeScript language service plugin supporting for importing assets.
 
-## Demo
+![Screenshot](./docs/screenshot.png)
 
-TODO
+## Motivation
 
-## Install
+In web front-end development, you often type asset import statements. However, asset import statements are not completed in the editor, which makes typing them difficult.
+
+![Video showing typing an import statement for an asset. You have to type everything yourself, from the name of the binding to the import specifier.](./docs/typing-asset-import-statement-is-difficult.gif)
+
+This plugin solves this problem by providing completion for asset import statements.
+
+![Video showing completing the import statement of asset.](./docs/complete-asset-import-statement.gif)
+
+## Installation
 
 ```console
 $ npm install -D @mizdra/typescript-plugin-asset
 ```
 
-## Usage
+## How to setup
+
+To use this plugin, you need to follow three steps.
+
+1. Write the plugin configuration in `tsconfig.json`
+2. Configure your editor to use the TypeScript language service plugin
+
+### Write the plugin configuration in `tsconfig.json`
+
+Add the following configuration to `tsconfig.json`. See [Options](#options) for details.
 
 ```json
 // tsconfig.json
@@ -31,6 +48,36 @@ $ npm install -D @mizdra/typescript-plugin-asset
   }
 }
 ```
+
+### Configure your VS Code to use the TypeScript language service plugin
+
+> **Warning**
+> This section can be skipped by users using editors other than visual studio code.
+
+VS Code cannot load plugins by default. Therefore, special configuration is required.
+
+https://github.com/microsoft/TypeScript/wiki/Writing-a-Language-Service-Plugin#testing-locally
+
+> Note: If you're using Visual Studio Code, you'll have to use the first approach above, with a path to the module, or run the "TypeScript: Select TypeScript Version" command and choose "Use Workspace Version", or click the version number between "TypeScript" and 😃 in the lower-right corner. Otherwise, VS Code will not be able to find your plugin.
+
+Visual Studio Code cannot load plugins by default. Therefore, special operations are required.
+
+Specifically, you have to do two operations:
+
+1. Run the "TypeScript: Select TypeScript Version" command
+2. Choose "Use Workspace Version"
+
+Also, although this is optional, the following settings can be added to `.vscode/settings.json` to prompt other team members to change the above settings.
+
+```json
+// .vscode/settings.json
+{
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true
+}
+```
+
+### (Optional)
 
 ## Options
 
