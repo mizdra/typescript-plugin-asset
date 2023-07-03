@@ -9,6 +9,5 @@
   "javascript.preferences.importModuleSpecifier": "relative",
   "typescript.preferences.importModuleSpecifierEnding": "js",
   "javascript.preferences.importModuleSpecifierEnding": "js",
-  "vitest.commandLine": "npm run test --",
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "vitest.commandLine": "npm run test --"
 }

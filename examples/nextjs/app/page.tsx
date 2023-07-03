@@ -1,3 +1,4 @@
+/* eslint-disable import/no-default-export */
 /* eslint-disable n/no-unsupported-features/es-syntax */
 import Image from 'next/image';
 
