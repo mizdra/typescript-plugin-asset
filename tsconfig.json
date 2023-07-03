@@ -9,9 +9,6 @@
     "isolatedModules": true,
     /* Lint Options */
     "noUnusedLocals": false, // Delegate to @typescript-eslint/no-unused-vars in eslint
-    "noUnusedParameters": false, // Delegate to @typescript-eslint/no-unused-vars in eslint
-
-    /* Debug Options */
-    "locale": "ja"
+    "noUnusedParameters": false // Delegate to @typescript-eslint/no-unused-vars in eslint
   }
 }
