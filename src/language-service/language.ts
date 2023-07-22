@@ -6,13 +6,13 @@ import { AssetLanguageServiceHost } from '../language-service-host.js';
 import { AssetPluginOptions } from '../option';
 
 export class AssetFile implements VirtualFile {
-  kind = FileKind.TextFile;
+
+  kind = FileKind.TypeScriptHostFile;
   capabilities = FileCapabilities.full;
   codegenStacks: Stack[] = []; // TODO: what is this?
-
   fileName!: string;
-  mappings!: VirtualFile['mappings'];
-  embeddedFiles!: VirtualFile['embeddedFiles'];
+  mappings: VirtualFile['mappings'] = [];
+  embeddedFiles: VirtualFile['embeddedFiles'] = [];
 
   constructor(
     public sourceFileName: string,
@@ -20,53 +20,25 @@ export class AssetFile implements VirtualFile {
     public host: AssetLanguageServiceHost,
     public assetPluginOptions: AssetPluginOptions,
   ) {
-    this.fileName = sourceFileName;
-    this.onSnapshotUpdated();
+    this.fileName = getDtsFilePath(this.sourceFileName, this.assetPluginOptions.allowArbitraryExtensions);
+    this.update(snapshot);
   }
 
   public update(newSnapshot: ts.IScriptSnapshot) {
     this.snapshot = newSnapshot;
-    this.onSnapshotUpdated();
-  }
-
-  onSnapshotUpdated() {
     const suggestionRule = this.host.getMatchedSuggestionRule(this.sourceFileName);
     if (suggestionRule === undefined) return;
-
-    this.mappings = [
-      {
-        sourceRange: [0, this.snapshot.getLength()],
-        generatedRange: [0, this.snapshot.getLength()],
-        data: FileRangeCapabilities.full,
-      },
-    ];
 
     const dtsContent = getDtsContent(
       this.sourceFileName,
       suggestionRule.exportedNameCase,
       suggestionRule.exportedNamePrefix,
     );
-    this.embeddedFiles = [
-      {
-        fileName: getDtsFilePath(this.sourceFileName, this.assetPluginOptions.allowArbitraryExtensions),
-        kind: FileKind.TypeScriptHostFile,
-        snapshot: {
-          getText: (start, end) => dtsContent.substring(start, end),
-          getLength: () => dtsContent.length,
-          getChangeRange: () => undefined, // TODO: what is this?
-        },
-        mappings: [
-          {
-            sourceRange: [0, dtsContent.length],
-            generatedRange: [0, dtsContent.length],
-            data: FileRangeCapabilities.full,
-          }, // TODO: what is this?
-        ],
-        capabilities: FileCapabilities.full,
-        embeddedFiles: [],
-        codegenStacks: [], // TODO: what is this?
-      },
-    ];
+    this.snapshot = {
+      getText: (start, end) => dtsContent.substring(start, end),
+      getLength: () => dtsContent.length,
+      getChangeRange: () => undefined, // TODO: what is this?
+    };
   }
 }
 

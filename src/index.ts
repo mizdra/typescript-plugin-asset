@@ -1,7 +1,11 @@
 import type * as ts from 'typescript/lib/tsserverlibrary';
-import { createLanguageService } from './language-service/index.js';
-import { createAssetLanguageServiceHost } from './language-service-host.js';
+import { createAssetLanguage } from './language-service/language.js';
+import { AssetLanguageServiceHost, createAssetLanguageServiceHost } from './language-service-host.js';
 import { getAssetPluginOptions } from './option.js';
+import { decorateLanguageService, decorateLanguageServiceHost, getExternalFiles } from '@volar/typescript';
+import { createVirtualFiles } from '@volar/language-core';
+
+const projectAssetLSHost = new WeakMap<ts.server.Project, AssetLanguageServiceHost>();
 
 const init: ts.server.PluginModuleFactory = (modules) => {
   const { typescript: ts } = modules;
@@ -15,38 +19,19 @@ const init: ts.server.PluginModuleFactory = (modules) => {
       }
 
       const assetTSLSHost = createAssetLanguageServiceHost(ts.sys, info, assetPluginOptions);
-      const assetLS = createLanguageService(assetTSLSHost, assetPluginOptions);
+      const assetLanguage = createAssetLanguage(assetTSLSHost, assetPluginOptions);
+      const virtualFiles = createVirtualFiles([assetLanguage]);
 
-      return new Proxy(info.languageService, {
-        get: (target: ts.LanguageService, property: keyof ts.LanguageService) => {
-          if (
-            property === 'getSemanticDiagnostics' ||
-            property === 'getEncodedSemanticClassifications' ||
-            property === 'getCompletionsAtPosition' ||
-            property === 'getCompletionEntryDetails' ||
-            property === 'getCompletionEntrySymbol' ||
-            property === 'getQuickInfoAtPosition' ||
-            property === 'getSignatureHelpItems' ||
-            property === 'getRenameInfo' ||
-            property === 'findRenameLocations' ||
-            property === 'getDefinitionAtPosition' ||
-            property === 'getDefinitionAndBoundSpan' ||
-            property === 'getTypeDefinitionAtPosition' ||
-            property === 'getImplementationAtPosition' ||
-            property === 'getReferencesAtPosition' ||
-            property === 'findReferences'
-          ) {
-            return assetLS[property];
-          }
-          return target[property];
-        },
-      });
+      projectAssetLSHost.set(info.project, assetTSLSHost);
+
+      decorateLanguageService(virtualFiles, info.languageService, true);
+      decorateLanguageServiceHost(virtualFiles, info.languageServiceHost, ts, assetPluginOptions.extensions);
+
+      return info.languageService;
     },
-    // MEMO: `getExternalFiles` is not required in modern times.
-    // ref: https://github.com/angular/vscode-ng-language-service/issues/473
-    // getExternalFiles(project) {
-    //   return assetFileNames ?? [];
-    // },
+    getExternalFiles(project) {
+      return projectAssetLSHost.get(project)?.getAssetFileNames() ?? [];
+    },
   };
   return pluginModule;
 };

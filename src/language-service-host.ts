@@ -1,9 +1,8 @@
 import path from 'node:path';
-import { LanguageServiceHost } from '@volar/language-core';
 import type * as ts from 'typescript/lib/tsserverlibrary';
 import { AssetPluginOptions, SuggestionRule } from './option';
 
-export type AssetLanguageServiceHost = LanguageServiceHost & {
+export type AssetLanguageServiceHost = {
   getAssetFileNames(): string[];
   isAssetFile(filePath: string): boolean;
   getMatchedSuggestionRule(assetFilePath: string): SuggestionRule | undefined;
@@ -63,27 +62,6 @@ export function createAssetLanguageServiceHost(
   );
 
   return {
-    getNewLine: () => info.project.getNewLine(),
-    useCaseSensitiveFileNames: () => info.project.useCaseSensitiveFileNames(),
-    readFile: (path) => info.project.readFile(path),
-    writeFile: (path, content) => info.project.writeFile(path, content),
-    fileExists: (path) => info.project.fileExists(path),
-    directoryExists: (path) => info.project.directoryExists(path),
-    getDirectories: (path) => info.project.getDirectories(path),
-    readDirectory: (path, extensions, exclude, include, depth) =>
-      info.project.readDirectory(path, extensions, exclude, include, depth),
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    realpath: info.project.realpath ? (path) => info.project.realpath!(path) : undefined,
-    getCompilationSettings: () => info.project.getCompilationSettings(),
-    getCurrentDirectory: () => info.project.getCurrentDirectory(),
-    getDefaultLibFileName: () => info.project.getDefaultLibFileName(),
-    getProjectVersion: () => info.project.getProjectVersion(),
-    getProjectReferences: () => info.project.getProjectReferences(),
-    getScriptFileNames: () => {
-      return [...info.project.getScriptFileNames(), ...assetFileNameAndRule.keys()];
-    },
-    getScriptVersion: (fileName) => info.project.getScriptVersion(fileName),
-    getScriptSnapshot: (fileName) => info.project.getScriptSnapshot(fileName),
     getAssetFileNames() {
       return [...assetFileNameAndRule.keys()];
     },
