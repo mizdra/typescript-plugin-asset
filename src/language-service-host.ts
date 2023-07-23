@@ -1,4 +1,6 @@
 import path from 'node:path';
+import { createVirtualFiles } from '@volar/language-core';
+import { decorateLanguageServiceHost as _decorateLanguageServiceHost } from '@volar/typescript';
 import type * as ts from 'typescript/lib/tsserverlibrary';
 import { AssetPluginOptions, SuggestionRule } from './option';
 
@@ -71,5 +73,22 @@ export function createAssetLanguageServiceHost(
     getMatchedSuggestionRule(assetFilePath: string) {
       return assetFileNameAndRule.get(assetFilePath);
     },
+  };
+}
+
+// eslint-disable-next-line max-params
+export function decorateLanguageServiceHost(
+  assetLanguageServiceHost: AssetLanguageServiceHost,
+  project: ts.server.Project,
+  virtualFiles: ReturnType<typeof createVirtualFiles>,
+  languageServiceHost: ts.LanguageServiceHost,
+  ts: typeof import('typescript/lib/tsserverlibrary'),
+  extensions: string[],
+) {
+  _decorateLanguageServiceHost(virtualFiles, languageServiceHost, ts, extensions);
+
+  const getScriptFileNames = project.getScriptFileNames.bind(project);
+  languageServiceHost.getScriptFileNames = () => {
+    return [...getScriptFileNames(), ...assetLanguageServiceHost.getAssetFileNames()];
   };
 }

@@ -1,8 +1,12 @@
 import { createVirtualFiles } from '@volar/language-core';
-import { decorateLanguageService, decorateLanguageServiceHost } from '@volar/typescript';
+import { decorateLanguageService } from '@volar/typescript';
 import type * as ts from 'typescript/lib/tsserverlibrary';
 import { createAssetLanguage } from './language-service/language.js';
-import { AssetLanguageServiceHost, createAssetLanguageServiceHost } from './language-service-host.js';
+import {
+  AssetLanguageServiceHost,
+  createAssetLanguageServiceHost,
+  decorateLanguageServiceHost,
+} from './language-service-host.js';
 import { getAssetPluginOptions } from './option.js';
 
 const projectAssetLSHost = new WeakMap<ts.server.Project, AssetLanguageServiceHost>();
@@ -25,7 +29,14 @@ const init: ts.server.PluginModuleFactory = (modules) => {
       projectAssetLSHost.set(info.project, assetTSLSHost);
 
       decorateLanguageService(virtualFiles, info.languageService, true);
-      decorateLanguageServiceHost(virtualFiles, info.languageServiceHost, ts, assetPluginOptions.extensions);
+      decorateLanguageServiceHost(
+        assetTSLSHost,
+        info.project,
+        virtualFiles,
+        info.languageServiceHost,
+        ts,
+        assetPluginOptions.extensions,
+      );
 
       return info.languageService;
     },
