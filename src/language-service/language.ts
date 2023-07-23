@@ -1,4 +1,4 @@
-import { VirtualFile, FileKind, FileCapabilities, FileRangeCapabilities } from '@volar/language-core';
+import { VirtualFile, FileKind, FileCapabilities } from '@volar/language-core';
 import { Stack } from '@volar/source-map';
 import type * as ts from 'typescript/lib/tsserverlibrary';
 import { getDtsContent, getDtsFilePath } from '../dts';
@@ -6,7 +6,6 @@ import { AssetLanguageServiceHost } from '../language-service-host.js';
 import { AssetPluginOptions } from '../option';
 
 export class AssetFile implements VirtualFile {
-
   kind = FileKind.TypeScriptHostFile;
   capabilities = FileCapabilities.full;
   codegenStacks: Stack[] = []; // TODO: what is this?

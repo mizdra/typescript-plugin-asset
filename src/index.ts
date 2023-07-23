@@ -1,9 +1,9 @@
+import { createVirtualFiles } from '@volar/language-core';
+import { decorateLanguageService, decorateLanguageServiceHost } from '@volar/typescript';
 import type * as ts from 'typescript/lib/tsserverlibrary';
 import { createAssetLanguage } from './language-service/language.js';
 import { AssetLanguageServiceHost, createAssetLanguageServiceHost } from './language-service-host.js';
 import { getAssetPluginOptions } from './option.js';
-import { decorateLanguageService, decorateLanguageServiceHost, getExternalFiles } from '@volar/typescript';
-import { createVirtualFiles } from '@volar/language-core';
 
 const projectAssetLSHost = new WeakMap<ts.server.Project, AssetLanguageServiceHost>();
 
