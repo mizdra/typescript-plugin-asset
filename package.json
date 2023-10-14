@@ -34,7 +34,7 @@
     "vitest-github-actions-reporter": "^0.10.0"
   },
   "overrides": {
-    "tsconfig-paths": "^4.0.0"
+    "tsconfig-paths": "^4.2.0"
   },
   "engines": {
     "node": ">=16.0.0"
