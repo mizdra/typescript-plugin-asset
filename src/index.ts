@@ -1,15 +1,11 @@
 import { createVirtualFiles } from '@volar/language-core';
-import { decorateLanguageService } from '@volar/typescript';
+import { decorateLanguageService, decorateLanguageServiceHost, searchExternalFiles } from '@volar/typescript';
 import type * as ts from 'typescript/lib/tsserverlibrary';
 import { createAssetLanguage } from './language-service/language.js';
-import {
-  AssetLanguageServiceHost,
-  createAssetLanguageServiceHost,
-  decorateLanguageServiceHost,
-} from './language-service-host.js';
-import { getAssetPluginOptions } from './option.js';
+import { createAssetLanguageServiceHost } from './language-service-host.js';
+import { AssetPluginOptions, getAssetPluginOptions } from './option.js';
 
-const projectAssetLSHost = new WeakMap<ts.server.Project, AssetLanguageServiceHost>();
+const externalFileCacheMap = new WeakMap<ts.server.Project, { options: AssetPluginOptions; externalFiles: string[] }>();
 
 const init: ts.server.PluginModuleFactory = (modules) => {
   const { typescript: ts } = modules;
@@ -26,25 +22,55 @@ const init: ts.server.PluginModuleFactory = (modules) => {
       const assetLanguage = createAssetLanguage(assetTSLSHost, assetPluginOptions);
       const virtualFiles = createVirtualFiles([assetLanguage]);
 
-      projectAssetLSHost.set(info.project, assetTSLSHost);
+      externalFileCacheMap.set(info.project, {
+        options: assetPluginOptions,
+        externalFiles: searchExternalFiles(ts, info.project, assetPluginOptions.extensions),
+      });
 
       decorateLanguageService(virtualFiles, info.languageService, true);
-      decorateLanguageServiceHost(
-        assetTSLSHost,
-        info.project,
-        virtualFiles,
-        info.languageServiceHost,
-        ts,
-        assetPluginOptions.extensions,
-      );
+      decorateLanguageServiceHost(virtualFiles, info.languageServiceHost, ts, assetPluginOptions.extensions);
 
       return info.languageService;
     },
-    getExternalFiles(project) {
-      return projectAssetLSHost.get(project)?.getAssetFileNames() ?? [];
+    getExternalFiles(project, updateLevel = -1) {
+      if (
+        // @ts-expect-error wait for TS 5.3
+        (updateLevel >= 1) satisfies ts.ProgramUpdateLevel.RootNamesAndUpdate
+      ) {
+        const cache = externalFileCacheMap.get(project);
+        if (!cache) throw new Error('The project cache not found');
+
+        const { options, externalFiles: oldFiles } = cache;
+        const newFiles = searchExternalFiles(ts, project, options.extensions);
+        externalFileCacheMap.set(project, { options, externalFiles: newFiles });
+        refreshDiagnosticsIfNeeded(project, oldFiles, newFiles);
+      }
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      return externalFileCacheMap.get(project)!.externalFiles;
     },
   };
   return pluginModule;
 };
+
+// ref: https://github.com/vuejs/language-tools/blob/ab7903ca7b59338fa9a36aba54bbcf181ebb22d2/packages/typescript-vue-plugin/src/index.ts#L56
+function refreshDiagnosticsIfNeeded(
+  project: ts.server.Project,
+  oldExternalFiles: string[],
+  newExternalFiles: string[],
+) {
+  let dirty = oldExternalFiles.length !== newExternalFiles.length;
+  if (!dirty) {
+    const set = new Set(oldExternalFiles);
+    for (const file of newExternalFiles) {
+      if (!set.has(file)) {
+        dirty = true;
+        break;
+      }
+    }
+  }
+  if (dirty) {
+    project.refreshDiagnostics();
+  }
+}
 
 export = init;
