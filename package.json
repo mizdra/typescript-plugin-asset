@@ -53,7 +53,7 @@
   "dependencies": {
     "@volar/language-core": "~1.9.1",
     "@volar/source-map": "~1.10.1",
-    "@volar/typescript": "~1.9.1",
+    "@volar/typescript": "~1.10.4",
     "change-case": "^4.1.2"
   },
   "peerDependencies": {
