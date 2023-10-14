@@ -39,7 +39,6 @@ Add the following configuration to `tsconfig.json`. See [Available options](#ava
     "plugins": [
       {
         "name": "@mizdra/typescript-plugin-asset",
-        "include": ["assets/**/*"],
         "extensions": [".png", ".jpg", ".svg"],
         "exportedNameCase": "constantCase",
         "exportedNamePrefix": "I_"
@@ -72,17 +71,6 @@ Also, although this is optional, the following settings can be added to `.vscode
 ```
 
 ## Available options
-
-### `include` (required)
-
-Glob pattern of assets. `@mizdra/typescript-plugin-asset` completes import statements only for assets matching this pattern.
-
-- Type: `string[]`
-- Example: `["assets/**/*"]`
-
-### `exclude`
-
-Glob pattern of assets to exclude. `@mizdra/typescript-plugin-asset` does not complete import statements for assets matching this pattern.
 
 ### `extensions` (required)
 
