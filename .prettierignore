@@ -1,2 +1,3 @@
 /dist
 /examples/nextjs/.next
+examples/nextjs/next-env.d.ts
