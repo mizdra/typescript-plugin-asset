@@ -21,7 +21,7 @@
   "devDependencies": {
     "@mizdra/eslint-config-mizdra": "^2.0.0",
     "@mizdra/prettier-config-mizdra": "^1.0.0",
-    "@tsconfig/node18": "^1.0.3",
+    "@tsconfig/node18": "^18.2.2",
     "@tsconfig/strictest": "^2.0.2",
     "@types/eslint": "^8.37.0",
     "@types/node": "^18.18.8",
