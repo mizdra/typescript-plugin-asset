@@ -18,7 +18,6 @@
       { "name": "next" },
       {
         "name": "@mizdra/typescript-plugin-asset",
-        "include": ["assets/**/*"],
         "extensions": [".png", ".jpg", ".svg"],
         "exportedNameCase": "constantCase",
         "exportedNamePrefix": "I_"
