@@ -1,5 +1,5 @@
-import type { LanguagePlugin } from '@volar/language-core';
 import path from 'node:path';
+import type { LanguagePlugin } from '@volar/language-core';
 import type * as ts from 'typescript/lib/tsserverlibrary';
 import { getDtsContent } from '../dts';
 import { AssetPluginOptions } from '../option';
@@ -7,7 +7,7 @@ import { AssetPluginOptions } from '../option';
 export function createAssetLanguage(sys: ts.System, assetPluginOptions: AssetPluginOptions): LanguagePlugin {
   return {
     createVirtualCode(fileId) {
-      const fileName = fileId.includes('://') ? fileId.split('://')[1]! : fileId;
+      const fileName = fileId.includes('://') ? (fileId.split('://')[1] ?? '') : fileId;
       if (isMatchFile(
         fileName,
         assetPluginOptions.extensions,
@@ -31,6 +31,7 @@ export function createAssetLanguage(sys: ts.System, assetPluginOptions: AssetPlu
           },
         }
       }
+      return undefined
     },
     updateVirtualCode(_fileId, virtualCode) {
       return virtualCode; // asset file content update does not affect virtual code
