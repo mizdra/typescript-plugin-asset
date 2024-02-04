@@ -52,8 +52,7 @@
   ],
   "dependencies": {
     "@volar/language-core": "~2.0.1",
-    "@volar/language-service": "~2.0.1",
-    "@volar/typescript": "~2.0.1",
+    "@volar/typescript": "~2.0.1-patch.1",
     "change-case": "^4.1.2"
   },
   "peerDependencies": {
