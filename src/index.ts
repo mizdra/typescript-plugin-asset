@@ -3,7 +3,6 @@ import { createAssetLanguage } from './language-service/language.js';
 import { getAssetPluginOptions } from './option.js';
 
 export = createLanguageServicePlugin((ts, info) => {
-
   const assetPluginOptions = getAssetPluginOptions(info);
 
   if (!info.project.fileExists(assetPluginOptions.tsConfigPath)) {

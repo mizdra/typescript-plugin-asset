@@ -7,13 +7,10 @@ import { AssetPluginOptions } from '../option';
 export function createAssetLanguage(sys: ts.System, assetPluginOptions: AssetPluginOptions): LanguagePlugin {
   return {
     createVirtualCode(fileId) {
-      const fileName = fileId.includes('://') ? (fileId.split('://')[1] ?? '') : fileId;
-      if (isMatchFile(
-        fileName,
-        assetPluginOptions.extensions,
-        assetPluginOptions.exclude,
-        assetPluginOptions.include
-      )) {
+      const fileName = fileId.includes('://') ? fileId.split('://')[1] ?? '' : fileId;
+      if (
+        isMatchFile(fileName, assetPluginOptions.extensions, assetPluginOptions.exclude, assetPluginOptions.include)
+      ) {
         const dtsContent = getDtsContent(
           fileName,
           assetPluginOptions.exportedNameCase,
@@ -29,15 +26,19 @@ export function createAssetLanguage(sys: ts.System, assetPluginOptions: AssetPlu
             getLength: () => dtsContent.length,
             getChangeRange: () => undefined,
           },
-        }
+        };
       }
-      return undefined
+      return undefined;
     },
     updateVirtualCode(_fileId, virtualCode) {
       return virtualCode; // asset file content update does not affect virtual code
     },
     typescript: {
-      extraFileExtensions: assetPluginOptions.extensions.map(ext => ({ extension: ext.slice(1), isMixedContent: true, scriptKind: 7 })),
+      extraFileExtensions: assetPluginOptions.extensions.map((ext) => ({
+        extension: ext.slice(1),
+        isMixedContent: true,
+        scriptKind: 7,
+      })),
       getScript(virtualCode) {
         return {
           code: virtualCode,
@@ -45,7 +46,7 @@ export function createAssetLanguage(sys: ts.System, assetPluginOptions: AssetPlu
           scriptKind: 3,
         };
       },
-    }
+    },
   };
 
   function isMatchFile(fileName: string, extensions: string[], exclude: string[], include: string[]): boolean {
