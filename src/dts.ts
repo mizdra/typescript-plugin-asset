@@ -2,15 +2,6 @@ import path from 'node:path';
 import { ExportedNameCase } from './option.js';
 import { changeCase } from './util';
 
-export function getDtsFilePath(filePath: string, arbitraryExtensions: boolean): string {
-  const { dir, name, ext } = path.parse(filePath);
-  if (arbitraryExtensions) {
-    return path.join(dir, `${name}.d${ext}.ts`);
-  } else {
-    return path.join(dir, `${name + ext}.d.ts`);
-  }
-}
-
 export function getExportedName(
   filePath: string,
   exportedNameCase: ExportedNameCase,
