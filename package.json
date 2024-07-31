@@ -23,7 +23,7 @@
     "@mizdra/prettier-config-mizdra": "^1.0.0",
     "@tsconfig/node18": "^18.2.2",
     "@tsconfig/strictest": "^2.0.2",
-    "@types/eslint": "^8.37.0",
+    "@types/eslint": "^9.6.0",
     "@types/node": "^18.18.8",
     "eslint": "^8.38.0",
     "minimatch": "^9.0.3",
