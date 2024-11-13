@@ -37,7 +37,7 @@
     "tsconfig-paths": "^4.2.0"
   },
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=18.20.5"
   },
   "publishConfig": {
     "access": "public",
