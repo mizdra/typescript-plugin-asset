@@ -2,8 +2,8 @@ import path from 'node:path';
 import type { LanguagePlugin } from '@volar/language-core';
 import type {} from '@volar/typescript';
 import ts from 'typescript/lib/tsserverlibrary';
-import { getDtsContent } from '../dts';
-import type { AssetPluginOptions } from '../option';
+import { getDtsContent } from './dts';
+import type { AssetPluginOptions } from './option';
 
 export function createAssetLanguagePlugin(
   sys: ts.System,

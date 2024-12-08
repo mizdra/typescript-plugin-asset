@@ -1,5 +1,5 @@
 import { createLanguageServicePlugin } from '@volar/typescript/lib/quickstart/createLanguageServicePlugin.js';
-import { createAssetLanguagePlugin } from './language-service/language.js';
+import { createAssetLanguagePlugin } from './language-plugin.js';
 import { getAssetPluginOptions } from './option.js';
 
 export = createLanguageServicePlugin((ts, info) => {
