@@ -51,8 +51,8 @@
     "dist"
   ],
   "dependencies": {
-    "@volar/language-core": "~2.0.2",
-    "@volar/typescript": "~2.0.2",
+    "@volar/language-core": "~2.4.10",
+    "@volar/typescript": "~2.4.10",
     "change-case": "^4.1.2"
   },
   "peerDependencies": {

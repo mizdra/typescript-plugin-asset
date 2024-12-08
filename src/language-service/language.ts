@@ -1,56 +1,62 @@
 import path from 'node:path';
 import type { LanguagePlugin } from '@volar/language-core';
-import type * as ts from 'typescript/lib/tsserverlibrary';
+import type {} from '@volar/typescript';
+import ts from 'typescript/lib/tsserverlibrary';
 import { getDtsContent } from '../dts';
 import { AssetPluginOptions } from '../option';
 
-export function createAssetLanguage(sys: ts.System, assetPluginOptions: AssetPluginOptions): LanguagePlugin {
+export function createAssetLanguage(sys: ts.System, assetPluginOptions: AssetPluginOptions): LanguagePlugin<string> {
   return {
-    createVirtualCode(fileId) {
-      const fileName = fileId.includes('://') ? fileId.split('://')[1] ?? '' : fileId;
-      if (
-        isMatchFile(fileName, assetPluginOptions.extensions, assetPluginOptions.exclude, assetPluginOptions.include)
-      ) {
-        const dtsContent = getDtsContent(
-          fileName,
-          assetPluginOptions.exportedNameCase,
-          assetPluginOptions.exportedNamePrefix,
-        );
-        return {
-          id: 'main',
-          mappings: [],
-          embeddedCodes: [],
-          languageId: 'typescript',
-          snapshot: {
-            getText: (start, end) => dtsContent.substring(start, end),
-            getLength: () => dtsContent.length,
-            getChangeRange: () => undefined,
-          },
-        };
-      }
+    getLanguageId(scriptId) {
+      if (isMatchFile(scriptId)) return 'asset';
       return undefined;
     },
-    updateVirtualCode(_fileId, virtualCode) {
-      return virtualCode; // asset file content update does not affect virtual code
+    createVirtualCode(scriptId, languageId) {
+      if (languageId !== 'asset') return undefined;
+      const dtsContent = getDtsContent(
+        scriptId,
+        assetPluginOptions.exportedNameCase,
+        assetPluginOptions.exportedNamePrefix,
+      );
+      return {
+        id: 'main',
+        languageId: 'asset',
+        snapshot: {
+          getText: (start, end) => dtsContent.substring(start, end),
+          getLength: () => dtsContent.length,
+          getChangeRange: () => undefined,
+        },
+        mappings: [],
+      };
     },
     typescript: {
-      extraFileExtensions: assetPluginOptions.extensions.map((ext) => ({
-        extension: ext.slice(1),
-        isMixedContent: true,
-        scriptKind: 7,
-      })),
-      getScript(virtualCode) {
+      extraFileExtensions: assetPluginOptions.extensions.map((ext) => {
         return {
-          code: virtualCode,
-          extension: '.ts',
-          scriptKind: 3,
+          extension: ext.slice(1),
+          isMixedContent: true,
+          scriptKind: ts.ScriptKind.TS,
+        };
+      }),
+      getServiceScript(root) {
+        return {
+          code: root,
+          extension: ts.Extension.Ts,
+          scriptKind: ts.ScriptKind.TS,
         };
       },
     },
   };
 
-  function isMatchFile(fileName: string, extensions: string[], exclude: string[], include: string[]): boolean {
-    if (!extensions.includes(path.extname(fileName))) return false;
-    return sys.readDirectory(path.dirname(fileName), extensions, exclude, include, 1).includes(fileName);
+  function isMatchFile(fileName: string): boolean {
+    if (!assetPluginOptions.extensions.includes(path.extname(fileName))) return false;
+    return sys
+      .readDirectory(
+        path.dirname(fileName),
+        assetPluginOptions.extensions,
+        assetPluginOptions.exclude,
+        assetPluginOptions.include,
+        1,
+      )
+      .includes(fileName);
   }
 }

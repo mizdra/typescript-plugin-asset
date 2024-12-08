@@ -7,10 +7,10 @@ export = createLanguageServicePlugin((ts, info) => {
 
   if (!info.project.fileExists(assetPluginOptions.tsConfigPath)) {
     // project name not a tsconfig path, this is a inferred project
-    return [];
+    return { languagePlugins: [] };
   }
 
   const assetLanguage = createAssetLanguage(ts.sys, assetPluginOptions);
 
-  return [assetLanguage];
+  return { languagePlugins: [assetLanguage] };
 });
