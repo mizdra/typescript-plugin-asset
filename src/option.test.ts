@@ -9,48 +9,48 @@ describe('assertOptions', () => {
   test('include', () => {
     const { include, ...baseOptionsWithoutInclude } = baseOptions;
     expect(() => assertOptions(baseOptionsWithoutInclude)).toThrowErrorMatchingInlineSnapshot(
-      '"`include` is required."',
+      `[AppOptionValidationError: \`include\` is required.]`,
     );
     expect(() => assertOptions({ ...baseOptions, include: 'foo' })).toThrowErrorMatchingInlineSnapshot(
-      '"`include` must be string array."',
+      `[AppOptionValidationError: \`include\` must be string array.]`,
     );
     expect(() => assertOptions({ ...baseOptions, include: [] })).toThrowErrorMatchingInlineSnapshot(
-      '"`include` must not be empty."',
+      `[AppOptionValidationError: \`include\` must not be empty.]`,
     );
   });
   test('exclude', () => {
     expect(() => assertOptions({ ...baseOptions, exclude: 'foo' })).toThrowErrorMatchingInlineSnapshot(
-      '"`exclude` must be string array."',
+      `[AppOptionValidationError: \`exclude\` must be string array.]`,
     );
     expect(() => assertOptions({ ...baseOptions, exclude: [] })).toThrowErrorMatchingInlineSnapshot(
-      '"`exclude` must not be empty."',
+      `[AppOptionValidationError: \`exclude\` must not be empty.]`,
     );
   });
   test('extensions', () => {
     expect(() => assertOptions({ ...baseOptions, extensions: 'foo' })).toThrowErrorMatchingInlineSnapshot(
-      '"`extensions` must be string array."',
+      `[AppOptionValidationError: \`extensions\` must be string array.]`,
     );
     expect(() => assertOptions({ ...baseOptions, extensions: [] })).toThrowErrorMatchingInlineSnapshot(
-      '"`extensions` must not be empty."',
+      `[AppOptionValidationError: \`extensions\` must not be empty.]`,
     );
     expect(() => assertOptions({ ...baseOptions, extensions: ['foo'] })).toThrowErrorMatchingInlineSnapshot(
-      '"`extensions` must start with \'.\'."',
+      `[AppOptionValidationError: \`extensions\` must start with '.'.]`,
     );
   });
   test('exportedNameCase', () => {
     expect(() => assertOptions({ ...baseOptions, exportedNameCase: 1 })).toThrowErrorMatchingInlineSnapshot(
-      '"`exportedNameCase` must be string."',
+      `[AppOptionValidationError: \`exportedNameCase\` must be string.]`,
     );
     expect(() => assertOptions({ ...baseOptions, exportedNameCase: 'foo' })).toThrowErrorMatchingInlineSnapshot(
-      '"`exportedNameCase` must be one of constantCase, camelCase, pascalCase, snakeCase"',
+      `[AppOptionValidationError: \`exportedNameCase\` must be one of constantCase, camelCase, pascalCase, snakeCase]`,
     );
   });
   test('exportedNamePrefix', () => {
     expect(() => assertOptions({ ...baseOptions, exportedNamePrefix: 1 })).toThrowErrorMatchingInlineSnapshot(
-      '"`exportedNamePrefix` must be string."',
+      `[AppOptionValidationError: \`exportedNamePrefix\` must be string.]`,
     );
     expect(() => assertOptions({ ...baseOptions, exportedNamePrefix: '1' })).toThrowErrorMatchingInlineSnapshot(
-      '"`exportedNamePrefix` must begin with a character that is a valid JavaScript identifier."',
+      `[AppOptionValidationError: \`exportedNamePrefix\` must begin with a character that is a valid JavaScript identifier.]`,
     );
   });
 });
