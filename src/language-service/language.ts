@@ -3,7 +3,7 @@ import type { LanguagePlugin } from '@volar/language-core';
 import type {} from '@volar/typescript';
 import ts from 'typescript/lib/tsserverlibrary';
 import { getDtsContent } from '../dts';
-import { AssetPluginOptions } from '../option';
+import type { AssetPluginOptions } from '../option';
 
 export function createAssetLanguage(sys: ts.System, assetPluginOptions: AssetPluginOptions): LanguagePlugin<string> {
   return {

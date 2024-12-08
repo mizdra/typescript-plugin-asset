@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { ExportedNameCase } from './option.js';
+import type { ExportedNameCase } from './option.js';
 import { changeCase } from './util';
 
 export function getExportedName(

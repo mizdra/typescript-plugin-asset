@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest';
-import { getExportedName, getDtsContent } from './dts.js';
+import { getDtsContent, getExportedName } from './dts.js';
 
 it('getExportedName', () => {
   expect(getExportedName('/dir/foo-bar.png', 'constantCase', 'I_')).toBe('I_FOO_BAR');
