@@ -1,5 +1,5 @@
 import { createLanguageServicePlugin } from '@volar/typescript/lib/quickstart/createLanguageServicePlugin.js';
-import { createAssetLanguage } from './language-service/language.js';
+import { createAssetLanguagePlugin } from './language-plugin.js';
 import { getAssetPluginOptions } from './option.js';
 
 export = createLanguageServicePlugin((ts, info) => {
@@ -10,7 +10,5 @@ export = createLanguageServicePlugin((ts, info) => {
     return { languagePlugins: [] };
   }
 
-  const assetLanguage = createAssetLanguage(ts.sys, assetPluginOptions);
-
-  return { languagePlugins: [assetLanguage] };
+  return { languagePlugins: [createAssetLanguagePlugin(ts.sys, assetPluginOptions)] };
 });
