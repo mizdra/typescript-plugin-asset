@@ -19,7 +19,7 @@
   },
   "prettier": "@mizdra/prettier-config-mizdra",
   "devDependencies": {
-    "@mizdra/eslint-config-mizdra": "^2.0.0",
+    "@mizdra/eslint-config-mizdra": "^3.0.1",
     "@mizdra/prettier-config-mizdra": "^1.0.0",
     "@tsconfig/node18": "^18.2.2",
     "@tsconfig/strictest": "^2.0.2",
