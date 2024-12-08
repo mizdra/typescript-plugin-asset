@@ -5,7 +5,10 @@ import ts from 'typescript/lib/tsserverlibrary';
 import { getDtsContent } from '../dts';
 import type { AssetPluginOptions } from '../option';
 
-export function createAssetLanguage(sys: ts.System, assetPluginOptions: AssetPluginOptions): LanguagePlugin<string> {
+export function createAssetLanguagePlugin(
+  sys: ts.System,
+  assetPluginOptions: AssetPluginOptions,
+): LanguagePlugin<string> {
   return {
     getLanguageId(scriptId) {
       if (isMatchFile(scriptId)) return 'asset';
